@@ -79,7 +79,7 @@ export default function Participar({ codigo }) {
   const miRespuesta = momento ? mias[momento.id] : null;
   const respondidos = momentos.filter((m) => mias[m.id]).length;
   const siguiente = momentos.find((m, i) => i > idx && m.abierto && !mias[m.id]);
-  const mostrandoFormulario = momento?.abierto && (!miRespuesta || editando);
+  const mostrandoFormulario = momento?.abierto && (!miRespuesta || editando || guardando);
 
   function cambiarMomento(id) {
     setSel(id);
