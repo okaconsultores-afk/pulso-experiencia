@@ -92,7 +92,7 @@ function titulo(doc, t, y) {
 function cabeceraPagina(doc, lg, sub) {
   franja(doc, 0);
   const lw = 18;
-  doc.addImage(lg.data, 'PNG', W - M - lw, 6, lw, (lw * lg.h) / lg.w);
+  doc.addImage(lg.data, 'PNG', W - M - lw, 6, lw, (lw * lg.h) / lg.w, 'logo', 'FAST');
   texto(doc, 'Pulso de la experiencia · Pick-A-Mood', M, 12, { size: 8, color: GRIS });
   texto(doc, sub, M, 17, { size: 9, bold: true, maxW: W - 2 * M - 25 });
   doc.setDrawColor(LINEA);
@@ -134,7 +134,7 @@ function rueda(doc, thumbs, resumen, cx, cy, R, d) {
     const y = cy - R * Math.sin(t);
     const n = resumen.conteo[a.id];
     const p = pct(n, resumen.total);
-    doc.addImage(thumbs[a.id], 'PNG', x - d / 2, y - d / 2, d, d);
+    doc.addImage(thumbs[a.id], 'PNG', x - d / 2, y - d / 2, d, d, 'pam-' + a.id, 'FAST');
     // anillo de porcentaje
     doc.setDrawColor(LINEA);
     doc.setLineWidth(1.1);
@@ -240,7 +240,7 @@ export async function generarPDF({ ev, codigo, datos, participantes, qr, enlace 
   /* ---------------- Portada / resumen ---------------- */
   franja(doc, 0, 3);
   const lw = 34;
-  doc.addImage(lg.data, 'PNG', W - M - lw, 10, lw, (lw * lg.h) / lg.w);
+  doc.addImage(lg.data, 'PNG', W - M - lw, 10, lw, (lw * lg.h) / lg.w, 'logo', 'FAST');
   texto(doc, 'INFORME DE EVALUACIÓN DE LA EXPERIENCIA', M, 18, { size: 8.5, bold: true, color: ROJO });
   let y = 26;
   y += texto(doc, ev.nombre, M, y, { size: 20, bold: true, maxW: W - 2 * M - lw - 6 });
@@ -285,7 +285,7 @@ export async function generarPDF({ ev, codigo, datos, participantes, qr, enlace 
     texto(doc, m.nombre, cols[1], yc + 1.2, { size: 9.5, bold: true, maxW: 50 });
     texto(doc, String(r.total), cols[2] + 6, yc + 1.2, { size: 11, bold: true, align: 'center' });
     if (r.predominantes.length) {
-      doc.addImage(thumbs[r.predominantes[0]], 'PNG', cols[3], yc - 5, 10, 10);
+      doc.addImage(thumbs[r.predominantes[0]], 'PNG', cols[3], yc - 5, 10, 10, 'pam-' + r.predominantes[0], 'FAST');
       const etq = r.predominantes.map((id) => ANIMO[id].etiqueta).join(' / ');
       texto(doc, etq, cols[3] + 12, yc - 0.3, { size: 8, bold: true, maxW: 38 });
       texto(doc, `${pct(r.conteo[r.predominantes[0]], r.total)}%`, cols[3] + 12, yc + 4, { size: 7, color: GRIS });
@@ -397,7 +397,7 @@ export async function generarPDF({ ev, codigo, datos, participantes, qr, enlace 
       doc.setDrawColor(LINEA);
       doc.setLineWidth(0.2);
       doc.line(M, yy, W - M, yy);
-      doc.addImage(thumbs[a.id], 'PNG', M, yy + 0.6, 5.8, 5.8);
+      doc.addImage(thumbs[a.id], 'PNG', M, yy + 0.6, 5.8, 5.8, 'pam-' + a.id, 'FAST');
       texto(doc, a.etiqueta, M + 8, yy + 4.6, { size: 8 });
       const x0 = M + 55;
       const ancho = W - M - 30 - x0;
@@ -431,7 +431,7 @@ export async function generarPDF({ ev, codigo, datos, participantes, qr, enlace 
           cabeceraPagina(doc, lg, `${ev.nombre} · Momento ${i + 1}: ${m.nombre} (comentarios)`);
           yy = 34;
         }
-        doc.addImage(thumbs[c.animo], 'PNG', M, yy - 3.2, 6.5, 6.5);
+        doc.addImage(thumbs[c.animo], 'PNG', M, yy - 3.2, 6.5, 6.5, 'pam-' + c.animo, 'FAST');
         doc.setTextColor(NAVY);
         doc.text(lineas, M + 10, yy);
         texto(doc, `${c.nombre || 'Anónimo'} · ${ANIMO[c.animo].etiqueta}`, M + 10, yy + lineas.length * 4.1, {
