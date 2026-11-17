@@ -1,6 +1,6 @@
 # Pulso de la experiencia
 
-_Evaluación de experiencias con Pick-A-Mood · OkaIC Investi CreAdora_
+_El que lo vive es el que lo goza · OkaIC Investi CreAdora_
 
 Aplicación web para evaluar cómo se siente un grupo en **2 a 4 momentos** de una experiencia (taller, clase,
 visita, evento…). Cada persona responde desde su celular o computador eligiendo uno de los 8 pictogramas del
@@ -13,8 +13,11 @@ agrado–activación. Los resultados del grupo se ven **en tiempo real** y se de
 - **Invitar**: código de 6 letras, enlace para copiar y código QR (se puede ampliar para proyectarlo).
 - **Abrir y cerrar momentos**: quien facilita decide cuándo se responde cada momento. Al abrir uno, los
   celulares de participantes saltan solos a ese momento.
-- **Responder**: un toque en el robot que mejor expresa cómo se siente la persona y, si quiere, un comentario.
-  Se puede cambiar la respuesta mientras el momento esté abierto.
+- **Responder**: la persona escribe primero su nombre o sus iniciales (obligatorio). En cada momento toca el
+  robot que mejor expresa cómo se siente (sin ver el nombre del estado de ánimo, que aparece solo después de
+  enviar) y responde dos campos obligatorios: cómo identifica el momento (p. ej. "cuando empezamos a jugar") y
+  por qué se siente así. Se puede cambiar la respuesta mientras el momento esté abierto.
+- **Nueva evaluación**: botón en el panel de resultados y botón "Limpiar" en el formulario de creación.
 - **Resultados en vivo** por momento: círculo con el porcentaje de cada estado de ánimo, flecha de tendencia
   del grupo, los 4 grupos (energía/calma × agradable/desagradable), barras y comentarios.
 - **Comparar momentos**: recorrido del ánimo promedio del grupo en el mapa agrado–activación y barras apiladas.
@@ -87,4 +90,10 @@ Estructura: `src/animos.js` (los 8 estados, colores y cálculos), `src/datos.js`
 Pick-A-Mood © Desmet, P. M. A., Vastenburg, M. H., & Romero, N. (2016). _Mood measurement with Pick-A-Mood:
 Review of current methods and design of a pictorial self-report scale._ Journal of Design Research, 14(3),
 241–279. Delft University of Technology. Los pictogramas se distribuyen con licencia **Creative Commons
-BY-NC-ND** (atribución, uso no comercial, sin obras derivadas): se usan sin modificar y con su crédito.
+BY-NC-ND** (atribución, uso no comercial, sin obras derivadas). Perfil del autor:
+<https://www.tudelft.nl/io/over-io/personen/desmet-pma>
+
+Ilustraciones adaptadas del trabajo de Pieter Desmet, elaboradas por Ángela Henao-Ortiz.
+
+Grupo de investigación OkaIC · Investi CreAdora:
+[GrupLAC](https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000021358)

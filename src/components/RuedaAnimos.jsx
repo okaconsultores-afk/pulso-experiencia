@@ -115,7 +115,6 @@ export default function RuedaAnimos({
                 disabled={deshabilitado}
                 aria-pressed={elegido}
                 aria-label={a.etiqueta}
-                title={a.etiqueta}
               >
                 {contenido}
               </button>

@@ -7,6 +7,7 @@ import {
   CUADRANTES,
   COLORES_MOMENTO,
   CREDITO_PAM,
+  CREDITO_ILUSTRACIONES,
   describirPromedio,
   pct,
 } from './animos.js';
@@ -413,31 +414,41 @@ export async function generarPDF({ ev, codigo, datos, participantes, qr, enlace 
     yy += 9;
 
     // Comentarios
-    const con = lista.filter((x) => x.comentario);
+    const con = lista.filter((x) => x.comentario || x.identificacion);
     if (con.length) {
-      if (yy > H - 32) {
+      if (yy > H - 34) {
         doc.addPage();
         cabeceraPagina(doc, lg, `${ev.nombre} · Momento ${i + 1}: ${m.nombre}`);
         yy = 34;
       }
       yy = titulo(doc, `Lo que dijeron las personas (${con.length})`, yy);
+      const ancho = W - 2 * M - 10;
       for (const c of con) {
-        doc.setFont('helvetica', 'normal');
         doc.setFontSize(8.5);
-        const lineas = doc.splitTextToSize(`“${c.comentario}”`, W - 2 * M - 10);
-        const alto = lineas.length * 4.1 + 6;
-        if (yy + alto > H - 16) {
+        doc.setFont('helvetica', 'bold');
+        const l1 = c.identificacion ? doc.splitTextToSize(`El momento: ${c.identificacion}`, ancho) : [];
+        doc.setFont('helvetica', 'normal');
+        const l2 = c.comentario ? doc.splitTextToSize(`Por qué: “${c.comentario}”`, ancho) : [];
+        const alto = (l1.length + l2.length) * 4.1 + 6;
+        if (yy + alto > H - 18) {
           doc.addPage();
           cabeceraPagina(doc, lg, `${ev.nombre} · Momento ${i + 1}: ${m.nombre} (comentarios)`);
           yy = 34;
         }
         doc.addImage(thumbs[c.animo], 'PNG', M, yy - 3.2, 6.5, 6.5, 'pam-' + c.animo, 'FAST');
         doc.setTextColor(NAVY);
-        doc.text(lineas, M + 10, yy);
-        texto(doc, `${c.nombre || 'Anónimo'} · ${ANIMO[c.animo].etiqueta}`, M + 10, yy + lineas.length * 4.1, {
-          size: 7,
-          color: GRIS,
-        });
+        let ly = yy;
+        if (l1.length) {
+          doc.setFont('helvetica', 'bold');
+          doc.text(l1, M + 10, ly);
+          ly += l1.length * 4.1;
+        }
+        if (l2.length) {
+          doc.setFont('helvetica', 'normal');
+          doc.text(l2, M + 10, ly);
+          ly += l2.length * 4.1;
+        }
+        texto(doc, `${c.nombre || 'Sin nombre'} · ${ANIMO[c.animo].etiqueta}`, M + 10, ly, { size: 7, color: GRIS });
         yy += alto + 1.5;
       }
     }
@@ -449,8 +460,9 @@ export async function generarPDF({ ev, codigo, datos, participantes, qr, enlace 
     doc.setPage(p);
     doc.setDrawColor(LINEA);
     doc.setLineWidth(0.3);
-    doc.line(M, H - 12, W - M, H - 12);
-    texto(doc, CREDITO_PAM, M, H - 7.5, { size: 6.5, color: GRIS, maxW: W - 2 * M - 25 });
+    doc.line(M, H - 14, W - M, H - 14);
+    texto(doc, CREDITO_PAM, M, H - 10, { size: 6.5, color: GRIS, maxW: W - 2 * M - 25 });
+    texto(doc, CREDITO_ILUSTRACIONES, M, H - 6.5, { size: 6.5, color: GRIS, maxW: W - 2 * M - 25 });
     texto(doc, `Página ${p} de ${total}`, W - M, H - 7.5, { size: 7, color: GRIS, align: 'right' });
   }
   void qr;

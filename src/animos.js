@@ -95,3 +95,7 @@ export function describirPromedio(p) {
 
 export const CREDITO_PAM =
   'Pick-A-Mood © Desmet, Vastenburg & Romero (2016), Delft University of Technology. Licencia CC BY-NC-ND.';
+export const CREDITO_ILUSTRACIONES =
+  'Ilustraciones adaptadas del trabajo de Pieter Desmet, elaboradas por Ángela Henao-Ortiz.';
+export const URL_DESMET = 'https://www.tudelft.nl/io/over-io/personen/desmet-pma';
+export const URL_GRUPLAC = 'https://scienti.minciencias.gov.co/gruplac/jsp/visualiza/visualizagr.jsp?nro=00000000021358';

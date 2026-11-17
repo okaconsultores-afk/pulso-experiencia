@@ -4,13 +4,13 @@ import { crearEvaluacion, misEvaluaciones, normalizarCodigo, mensajeError, olvid
 import RuedaAnimos from './RuedaAnimos.jsx';
 
 const SUGERENCIAS = ['Al inicio', 'Durante', 'Al cierre', 'Una semana después'];
+const PREGUNTA = '¿Cómo te sientes en este momento?';
 
 export default function Inicio() {
   const [codigo, setCodigo] = useState('');
   const [nombre, setNombre] = useState('');
   const [pregunta, setPregunta] = useState('¿Cómo te sientes en este momento?');
   const [momentos, setMomentos] = useState(['Al inicio', 'Durante', 'Al cierre']);
-  const [mostrarEtiquetas, setMostrarEtiquetas] = useState(true);
   const [resultadosVisibles, setResultadosVisibles] = useState(true);
   const [abrirTodos, setAbrirTodos] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -31,7 +31,7 @@ export default function Inicio() {
         nombre: nombre.trim().slice(0, 120),
         pregunta: (pregunta.trim() || '¿Cómo te sientes en este momento?').slice(0, 200),
         momentos: lista.map((n, i) => ({ id: `m${i + 1}`, nombre: n.slice(0, 60), abierto: abrirTodos || i === 0 })),
-        mostrarEtiquetas,
+        mostrarEtiquetas: false,
         resultadosVisibles,
       });
       ir(`/e/${c}/resultados`);
@@ -41,6 +41,15 @@ export default function Inicio() {
     } finally {
       setEnviando(false);
     }
+  }
+
+  function limpiar() {
+    setNombre('');
+    setPregunta(PREGUNTA);
+    setMomentos(['Al inicio', 'Durante', 'Al cierre']);
+    setResultadosVisibles(true);
+    setAbrirTodos(false);
+    setError('');
   }
 
   function unirse(e) {
@@ -82,7 +91,7 @@ export default function Inicio() {
       </section>
 
       <div className="inicio-columnas">
-        <form className="tarjeta crear" onSubmit={crear}>
+        <form className="tarjeta crear" id="crear" onSubmit={crear}>
           <h2>Crear una evaluación</h2>
           <p className="ayuda">Para quien facilita la experiencia (taller, clase, visita, evento…).</p>
 
@@ -154,13 +163,6 @@ export default function Inicio() {
               </span>
             </label>
             <label className="check">
-              <input type="checkbox" checked={mostrarEtiquetas} onChange={(e) => setMostrarEtiquetas(e.target.checked)} />
-              <span>
-                Mostrar el nombre de cada estado de ánimo bajo el robot
-                <small>Los autores recomiendan usar los robots sin palabras para una respuesta más intuitiva.</small>
-              </span>
-            </label>
-            <label className="check">
               <input
                 type="checkbox"
                 checked={resultadosVisibles}
@@ -171,9 +173,14 @@ export default function Inicio() {
           </fieldset>
 
           {error && <p className="error">{error}</p>}
-          <button className="btn btn-primario btn-grande" disabled={enviando}>
-            {enviando ? 'Creando…' : 'Crear y obtener el enlace'}
-          </button>
+          <div className="crear-botones">
+            <button type="button" className="btn btn-suave" onClick={limpiar}>
+              Limpiar
+            </button>
+            <button className="btn btn-primario btn-grande" disabled={enviando}>
+              {enviando ? 'Creando…' : 'Crear y obtener el enlace'}
+            </button>
+          </div>
         </form>
 
         <aside className="tarjeta como">

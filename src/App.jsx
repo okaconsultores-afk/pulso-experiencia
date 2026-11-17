@@ -4,7 +4,7 @@ import Participar from './components/Participar.jsx';
 import Panel from './components/Panel.jsx';
 import logo from './assets/logo-okaic.png';
 import { MODO_NUBE, normalizarCodigo } from './datos.js';
-import { CREDITO_PAM } from './animos.js';
+import { CREDITO_ILUSTRACIONES, URL_DESMET, URL_GRUPLAC } from './animos.js';
 
 function leerRuta() {
   const h = window.location.hash.replace(/^#\/?/, '');
@@ -33,13 +33,15 @@ export default function App() {
   return (
     <div className="app">
       <header className="barra">
-        <a href="#/" className="barra-marca" aria-label="Ir al inicio">
-          <img src={logo} alt="OkaIC · Investi CreAdora" />
-          <span>
+        <div className="barra-marca">
+          <a href={URL_GRUPLAC} target="_blank" rel="noopener noreferrer" title="Grupo OkaIC · Investi CreAdora en GrupLAC">
+            <img src={logo} alt="OkaIC · Investi CreAdora (abre su GrupLAC)" />
+          </a>
+          <a href="#/" className="barra-titulo" aria-label="Ir al inicio">
             <strong>Pulso de la experiencia</strong>
-            <small>Evaluación con Pick-A-Mood</small>
-          </span>
-        </a>
+            <small>El que lo vive es el que lo goza</small>
+          </a>
+        </div>
         <span className="franja" aria-hidden="true" />
       </header>
 
@@ -57,9 +59,19 @@ export default function App() {
       </main>
 
       <footer className="pie">
-        <p>{CREDITO_PAM}</p>
         <p>
-          Desarrollado por <strong>OkaIC · Investi CreAdora</strong>
+          Pick-A-Mood ©{' '}
+          <a href={URL_DESMET} target="_blank" rel="noopener noreferrer">
+            Desmet
+          </a>
+          , Vastenburg &amp; Romero (2016), Delft University of Technology. Licencia CC BY-NC-ND.
+        </p>
+        <p>{CREDITO_ILUSTRACIONES}</p>
+        <p>
+          Desarrollado por{' '}
+          <a href={URL_GRUPLAC} target="_blank" rel="noopener noreferrer">
+            <strong>OkaIC · Investi CreAdora</strong>
+          </a>
         </p>
       </footer>
     </div>

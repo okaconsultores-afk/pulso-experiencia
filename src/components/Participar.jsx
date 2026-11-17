@@ -20,6 +20,8 @@ export default function Participar({ codigo }) {
   const [sel, setSel] = useState(null); // id del momento visible
   const [eleccion, setEleccion] = useState(null);
   const [comentario, setComentario] = useState('');
+  const [identificacion, setIdentificacion] = useState('');
+  const [nombreListo, setNombreListo] = useState(() => nombreGuardado().trim().length >= 2);
   const [editando, setEditando] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [aviso, setAviso] = useState('');
@@ -85,19 +87,44 @@ export default function Participar({ codigo }) {
     setSel(id);
     setEleccion(null);
     setComentario('');
+    setIdentificacion('');
     setEditando(false);
   }
 
+  const faltaIdent = identificacion.trim().length < 3;
+  const faltaPorque = comentario.trim().length < 3;
+  const puedeEnviar = eleccion && !faltaIdent && !faltaPorque && !guardando;
+  const textoBoton = guardando
+    ? 'Enviando…'
+    : !eleccion
+      ? 'Elige un robot'
+      : faltaIdent || faltaPorque
+        ? 'Completa los dos campos'
+        : 'Enviar respuesta';
+
+  function confirmarNombre(e) {
+    e.preventDefault();
+    if (nombre.trim().length < 2) return;
+    guardarNombre(nombre.trim());
+    setNombreListo(true);
+  }
+
   async function enviar() {
-    if (!eleccion || !momento) return;
+    if (!puedeEnviar || !momento) return;
     setGuardando(true);
     setError('');
     try {
       guardarNombre(nombre.trim());
-      await guardarRespuesta(codigo, momento.id, { animo: eleccion, comentario: comentario.trim(), nombre: nombre.trim() });
+      await guardarRespuesta(codigo, momento.id, {
+        animo: eleccion,
+        comentario: comentario.trim(),
+        identificacion: identificacion.trim(),
+        nombre: nombre.trim(),
+      });
       setEditando(false);
       setEleccion(null);
       setComentario('');
+      setIdentificacion('');
     } catch (e) {
       console.error(e);
       setError(mensajeError(e));
@@ -113,17 +140,41 @@ export default function Participar({ codigo }) {
       <div className="participar-cabeza">
         <p className="sobretitulo">Evaluación de la experiencia</p>
         <h1>{ev.nombre}</h1>
-        <label className="campo campo-nombre">
-          <span>Tu nombre o seudónimo (opcional)</span>
-          <input
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            onBlur={() => guardarNombre(nombre.trim())}
-            maxLength={60}
-            placeholder="Puedes dejarlo en blanco"
-          />
-        </label>
+        {nombreListo && (
+          <p className="participa-como">
+            Participas como <strong>{nombre.trim()}</strong>{' '}
+            <button type="button" className="enlace-boton" onClick={() => setNombreListo(false)}>
+              Cambiar
+            </button>
+          </p>
+        )}
       </div>
+
+      {!nombreListo && (
+        <form className="tarjeta pedir-nombre" onSubmit={confirmarNombre}>
+          <h2>Antes de empezar</h2>
+          <label className="campo">
+            <span>Escribe tu nombre o tus iniciales</span>
+            <input
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              maxLength={60}
+              placeholder="Ej.: Ana Pérez o A. P."
+              autoComplete="name"
+              required
+              minLength={2}
+              autoFocus
+            />
+            <small>Lo necesitamos para identificar tus respuestas en los distintos momentos.</small>
+          </label>
+          <button className="btn btn-primario btn-grande" disabled={nombre.trim().length < 2}>
+            Empezar
+          </button>
+        </form>
+      )}
+
+      {nombreListo && (
+      <>
 
       <nav className="momentos-nav" aria-label="Momentos">
         {momentos.map((m, i) => {
@@ -170,22 +221,28 @@ export default function Participar({ codigo }) {
             modo="elegir"
             seleccionado={eleccion}
             onElegir={setEleccion}
-            mostrarEtiquetas={ev.mostrarEtiquetas !== false}
+            mostrarEtiquetas={false}
           />
           <div className={`responder-pie ${eleccion ? 'visible' : ''}`}>
-            {eleccion && (
-              <p className="elegido-txt">
-                Elegiste: <strong>{ANIMO[eleccion].etiqueta}</strong>
-              </p>
-            )}
             <label className="campo">
-              <span>¿Quieres contar por qué? (opcional)</span>
+              <span>¿Cómo identificas este momento? *</span>
+              <input
+                value={identificacion}
+                onChange={(e) => setIdentificacion(e.target.value)}
+                maxLength={200}
+                placeholder="Ej.: cuando empezamos a jugar, o cuando entramos al restaurante"
+                required
+              />
+            </label>
+            <label className="campo">
+              <span>¿Por qué te sientes así? *</span>
               <textarea
                 value={comentario}
                 onChange={(e) => setComentario(e.target.value)}
                 rows={2}
                 maxLength={500}
-                placeholder="Escribe con tus palabras cómo te sientes…"
+                placeholder="Cuéntalo con tus palabras…"
+                required
               />
             </label>
             {error && <p className="error">{error}</p>}
@@ -195,8 +252,8 @@ export default function Participar({ codigo }) {
                   Cancelar
                 </button>
               )}
-              <button type="button" className="btn btn-primario btn-grande" disabled={!eleccion || guardando} onClick={enviar}>
-                {guardando ? 'Enviando…' : eleccion ? 'Enviar respuesta' : 'Elige un robot'}
+              <button type="button" className="btn btn-primario btn-grande" disabled={!puedeEnviar} onClick={enviar}>
+                {textoBoton}
               </button>
             </div>
           </div>
@@ -216,8 +273,18 @@ export default function Participar({ codigo }) {
               <h2>¡Gracias! Tu respuesta quedó registrada.</h2>
               <p>
                 Elegiste <strong>{ANIMO[miRespuesta.animo].etiqueta}</strong>
-                {miRespuesta.comentario ? <> y escribiste: “{miRespuesta.comentario}”</> : '.'}
+                .
               </p>
+              {miRespuesta.identificacion && (
+                <p className="cita">
+                  <b>El momento:</b> {miRespuesta.identificacion}
+                </p>
+              )}
+              {miRespuesta.comentario && (
+                <p className="cita">
+                  <b>Por qué:</b> {miRespuesta.comentario}
+                </p>
+              )}
               <div className="fila">
                 {momento.abierto && (
                   <button
@@ -227,6 +294,7 @@ export default function Participar({ codigo }) {
                       setEditando(true);
                       setEleccion(miRespuesta.animo);
                       setComentario(miRespuesta.comentario || '');
+                      setIdentificacion(miRespuesta.identificacion || '');
                     }}
                   >
                     Cambiar mi respuesta
@@ -251,6 +319,8 @@ export default function Participar({ codigo }) {
             </div>
           )}
         </section>
+      )}
+      </>
       )}
     </div>
   );

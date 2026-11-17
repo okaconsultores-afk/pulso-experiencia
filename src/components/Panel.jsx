@@ -140,9 +140,14 @@ export default function Panel({ codigo }) {
             {!MODO_NUBE && ' (demostración)'}
           </p>
         </div>
-        <button type="button" className="btn btn-primario" onClick={descargarPDF} disabled={generando}>
-          {generando ? 'Generando PDF…' : '⤓ Descargar PDF'}
-        </button>
+        <div className="panel-botones">
+          <a className="btn btn-suave" href="#/" onClick={() => setTimeout(() => document.getElementById('crear')?.scrollIntoView({ behavior: 'smooth' }), 200)}>
+            + Nueva evaluación
+          </a>
+          <button type="button" className="btn btn-primario" onClick={descargarPDF} disabled={generando}>
+            {generando ? 'Generando PDF…' : '⤓ Descargar PDF'}
+          </button>
+        </div>
       </div>
 
       {error && <p className="error">{error}</p>}
@@ -306,7 +311,7 @@ export default function Panel({ codigo }) {
 }
 
 function Comentarios({ lista }) {
-  const con = lista.filter((r) => r.comentario);
+  const con = lista.filter((r) => r.comentario || r.identificacion);
   if (!con.length) return null;
   return (
     <div className="comentarios">
@@ -319,7 +324,12 @@ function Comentarios({ lista }) {
             <li key={r.uid} style={{ '--color': ANIMO[r.animo].color }}>
               <img src={ANIMO[r.animo].img} alt={ANIMO[r.animo].etiqueta} title={ANIMO[r.animo].etiqueta} />
               <div>
-                <p>“{r.comentario}”</p>
+                {r.identificacion && (
+                  <p className="coment-momento">
+                    <b>El momento:</b> {r.identificacion}
+                  </p>
+                )}
+                {r.comentario && <p>“{r.comentario}”</p>}
                 <small>
                   {r.nombre || 'Anónimo'} · {ANIMO[r.animo].etiqueta}
                 </small>

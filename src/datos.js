@@ -213,8 +213,13 @@ export function escucharRespuestas(codigo, cb, cbError) {
 }
 
 /** Guarda (o cambia) la respuesta de la persona actual en un momento. */
-export async function guardarRespuesta(codigo, momentoId, { animo, comentario, nombre }) {
-  const r = { animo, comentario: (comentario || '').slice(0, 500), t: Date.now() };
+export async function guardarRespuesta(codigo, momentoId, { animo, comentario, identificacion, nombre }) {
+  const r = {
+    animo,
+    comentario: (comentario || '').slice(0, 500),
+    identificacion: (identificacion || '').slice(0, 200),
+    t: Date.now(),
+  };
   if (!MODO_NUBE) {
     const uid = uidLocal();
     const o = leerLS(`pam:resp:${codigo}`, {});

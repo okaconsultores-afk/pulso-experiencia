@@ -37,9 +37,9 @@ img { max-width: 100%; }
 .barra { background: #fff; position: sticky; top: 0; z-index: 30; box-shadow: 0 1px 0 var(--linea); }
 .barra-marca { display: flex; align-items: center; gap: 14px; padding: 10px 16px; max-width: 1180px; margin: 0 auto; text-decoration: none; }
 .barra-marca img { height: 54px; width: auto; }
-.barra-marca span { display: flex; flex-direction: column; border-left: 2px solid var(--linea); padding-left: 14px; }
-.barra-marca strong { font-family: var(--titulos); font-size: 1.2rem; color: var(--navy); }
-.barra-marca small { color: var(--gris); font-size: 0.8rem; }
+
+
+
 .franja { display: block; height: 4px; background: linear-gradient(90deg, var(--naranja) 0 25%, var(--rojo) 25% 50%, var(--cafe) 50% 75%, var(--navy) 75%); }
 .aviso-demo { background: #fff4e8; color: #7a3b10; border-bottom: 1px solid #f6d5b3; padding: 8px 16px; font-size: 0.88rem; text-align: center; }
 
@@ -255,4 +255,27 @@ button.rueda-item:disabled { cursor: default; }
   .momento-chip { min-width: 120px; }
   .responder .fila-fin .btn-grande { width: 100%; }
   .panel-cabeza .btn { width: 100%; }
+}
+
+/* Ajustes v2 */
+.barra-marca > a:first-child { display: flex; }
+.barra-titulo { display: flex; flex-direction: column; border-left: 2px solid var(--linea); padding-left: 14px; text-decoration: none; }
+.barra-titulo strong { font-family: var(--titulos); font-size: 1.2rem; color: var(--navy); }
+.barra-titulo small { color: var(--rojo); font-size: 0.82rem; font-style: italic; }
+.pie a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.4); text-underline-offset: 2px; }
+.pie a:hover { color: var(--naranja); }
+.pedir-nombre { max-width: 520px; margin: 8px 0 20px; }
+.pedir-nombre .btn { width: 100%; }
+.participa-como { margin: 4px 0 0; color: var(--gris); }
+.participa-como strong { color: var(--navy); }
+.enlace-boton { border: 0; background: none; color: var(--rojo); font-weight: 700; cursor: pointer; padding: 0 4px; text-decoration: underline; }
+.cita { background: #fcf8f5; border-radius: 10px; padding: 8px 12px; font-size: 0.94rem; }
+.coment-momento { font-size: 0.82rem !important; color: var(--navy); }
+.crear-botones { display: flex; gap: 10px; }
+.crear-botones .btn-grande { flex: 1; }
+.panel-botones { display: flex; gap: 10px; flex-wrap: wrap; }
+@media (max-width: 560px) {
+  .barra-titulo strong { font-size: 1.05rem; }
+  .panel-botones { width: 100%; }
+  .panel-botones .btn { flex: 1; }
 }
